@@ -1,0 +1,87 @@
+1.创建一个script标签并且type/html 添加id
+<script type="text/html" id="tep">
+模板的内容就在这里写
+		
+2.页面新建一个元素(之后渲染的内容都会放在这个元素中)，并且加上id
+<div id="box"></div>
+			
+3.在script标签中
+调用template函数把第一步中的id名传入进去,数据
+var html = template('tep', data);
+
+4.把函数的返回值等于第二步的innerHTML
+
+例
+<div id="box"></div>
+<script type="text/javascript" src="artTemplate.js"></script>
+<script type="text/html" id="tep">
+	<div id="box1">
+		<%list.forEach(function(e){%>
+			<%if(e === 'miaov'){%>
+				<p><%=e.charAt().toUpperCase()+e.substring(1)%></p>
+			<%}else{%>
+				<p class="red"><%=e%></p>
+			<%}%>
+		<%})%>
+	</div>
+	
+	<div id="box2">
+		<%list2.forEach(function(e){%>
+			<%if(e === 'miaov'){%>
+				<strong><%=e.charAt().toUpperCase()+e.substring(1)%></strong>
+			<%}else{%>
+				<strong class="red"><%=e%></strong>
+			<%}%>
+		<%})%>
+	</div>
+	
+	
+	
+</script>
+
+<script type="text/javascript">
+var json = {
+	    title: '标签',
+	    list: ['文艺', '博客', '摄影', '电影', '民谣', '旅行', '吉他','miaov'],
+	    list2:['文艺2', '博客2', '摄影', '电影', '民谣', '旅行', '吉他','miaov'],
+	};
+	
+	 
+	
+
+	
+	var box = document.getElementById('box');
+	var html = template('tep', json);
+	
+	
+	
+	box.innerHTML = html;
+	
+</script>
+
+如果是要获取服务器上的数据，只需要把var html = template('temp',data); box.html(html); 放到jsonp中，
+例  
+    function createLi(start,val){
+		$.ajax({
+			url:'https://api.douban.com//v2/movie/search?callback=?',
+			data:{
+				q:val,
+				start:start,
+				count:8
+			},
+			dataType:'jsonp',
+			success:function(data){
+				console.log(data)
+				var html = template('temp',data);
+				box.html(html);
+			}
+		});
+	}
+	调用这个函数就行了
+
+
+
+mvc
+		m -> model  (数据)  ajax操作数据
+		v -> view    (视图)  模板引擎使用数据并且渲染到页面上
+		c -> controller (控制器)  按钮，控制页面的渲染
